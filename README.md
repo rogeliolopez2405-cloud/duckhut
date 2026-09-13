@@ -1,5 +1,7 @@
 # Duckhut
 
+**Built by Lopez_INC** — part of the Lopez_INC project portfolio.
+
 [Play Duckhut](https://rogeliolopez2405-cloud.github.io/duckhut/) · [Suggest an idea](https://github.com/rogeliolopez2405-cloud/duckhut/issues/new/choose)
 
 [Play V2: Afterglow](https://rogeliolopez2405-cloud.github.io/duckhut/?edition=modern) — smooth artwork, a dusk marsh, lighting, a new dog, and wave/time indicators. The classic edition remains available from the edition selector.

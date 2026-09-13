@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#111c20"><meta name="description" content="Duckhut: a free, open-source, retro duck shooting browser game. Three shots. Two ducks. Make them count.">
+  <meta name="author" content="Lopez_INC">
   <title>Duckhut — a little arcade nostalgia</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111c20'/%3E%3Cpath d='M6 18h13V9h8v8h-5v7H10z' fill='%23f5cb62'/%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
@@ -10,7 +11,7 @@
 </head>
 <body>
   <main>
-    <header><a class="brand" href="./" aria-label="Duckhut home"><span class="brand-mark">DH</span> DUCKHUT<span class="edition" id="edition-label">CLASSIC / 01</span></a><div class="header-actions"><button id="install-help">Install / shortcut</button><button id="tv" aria-pressed="false">TV / Fullscreen</button><button id="sound" aria-pressed="false">Sound off</button></div></header>
+    <header><a class="brand" href="./" aria-label="Duckhut home"><span class="brand-mark">DH</span> <span class="brand-name">DUCKHUT<small>Built by Lopez_INC</small></span><span class="edition" id="edition-label">CLASSIC / 01</span></a><div class="header-actions"><button id="install-help">Install / shortcut</button><button id="tv" aria-pressed="false">TV / Fullscreen</button><button id="sound" aria-pressed="false">Sound off</button></div></header>
     <div class="game-heading"><div><span class="eyebrow">THE MARSH IS CALLING</span><h1 id="page-title">Just one more round.</h1></div><nav class="edition-nav" aria-label="Game edition"><a id="edition-classic" href="?edition=classic">Classic</a><a id="edition-modern" href="?edition=modern">V2 · Afterglow</a></nav></div>
     <div class="aim-settings"><label for="sensitivity">Controller aim speed <output id="sensitivity-value" for="sensitivity">40%</output></label><input id="sensitivity" type="range" min="20" max="100" step="10" value="40"><span>LB / RB adjust · hold LT for precision</span></div>
     <section class="cabinet" aria-label="Duck shooting game">
@@ -26,7 +27,7 @@
     <p id="controller" class="controller-status" role="status">Controller: press A to connect</p>
     <details class="tv-help"><summary>Playing on a TV or Xbox</summary><p>Open this game in your TV browser or Microsoft Edge on your Xbox. Choose TV / Fullscreen above. With a compatible controller: left stick or D-pad aims, A or right trigger shoots, and Menu pauses. Press A again to start or continue. If Xbox Edge offers game controls, enable them.</p><p>TV remotes: arrow keys aim and OK / Enter shoots when the game has focus. Browser and remote support varies; a USB mouse or a computer connected to your TV by HDMI is a fallback. This is a browser game, not an installed Xbox app.</p></details>
     <dialog id="install-dialog"><button id="close-install" aria-label="Close install help">×</button><h2>Keep Duckhut close.</h2><p id="install-status">Choose the shortcut that fits your device.</p><button id="install-app" class="primary" hidden>Install Duckhut</button><h3>Xbox</h3><p>In Edge, open Favorites and choose <strong>Add this page to favorites</strong>. Next time, open Edge → Favorites → Duckhut. This saves typing the address. Direct installation as an Xbox game is not confirmed.</p><h3>Phone or computer</h3><p>If your browser offers <strong>Install app</strong> or <strong>Add to Home Screen</strong>, use it for a dedicated shortcut. On iPhone or iPad, use Safari → Share → Add to Home Screen.</p><p class="small">The game saves this edition as the app’s start page when your browser supports installation. Open it online once to prepare offline play. Xbox browser support may differ.</p></dialog>
-    <footer><p>Built for the joy of playing again.<span>An independent tribute with original pixel artwork and sounds.</span></p><a id="ideas" href="CONTRIBUTING.md">Have an idea? Make it part of the game ↗</a></footer>
+    <footer><p>Built by Lopez_INC<span>© 2026 Lopez_INC and Duckhut contributors · Open-source under MIT.</span></p><a id="ideas" href="CONTRIBUTING.md">Have an idea? Make it part of the game ↗</a></footer>
   </main>
 </body>
 </html>
