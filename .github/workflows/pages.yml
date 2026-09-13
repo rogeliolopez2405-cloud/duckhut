@@ -22,7 +22,9 @@ jobs:
       - name: Stage public game files
         run: |
           mkdir _site
-          cp index.html style.css game.js repo.json CONTRIBUTING.md _site/
+          for file in *.html *.css *.js *.json *.md *.png *.webmanifest; do
+            [ ! -f "$file" ] || cp "$file" _site/
+          done
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
