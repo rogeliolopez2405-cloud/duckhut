@@ -1,0 +1,16 @@
+name: Game idea
+description: Suggest something fun for Duckhut
+title: "[Idea] "
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What's your idea?
+      description: What would a player do, and why would it be fun?
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Examples or sketches
+      description: Optional details to help us imagine it.
