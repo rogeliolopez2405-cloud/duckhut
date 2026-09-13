@@ -5,3 +5,5 @@
 - Classic and Afterglow share game rules and controller settings. Preserve both play links when updating either edition.
 - Publish approved game updates through the existing GitHub Pages workflow. Keep deployment limited to public game assets.
 - For gameplay changes, verify round progression, scoring, ammo, pause/resume, and controller behavior. Verify relevant browser rendering and mobile/TV layout.
+
+- The owner requests that completed project changes always be committed and pushed to the public repository, then verified through GitHub Pages.

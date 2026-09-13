@@ -65,3 +65,7 @@ An original animated marsh retriever pops up after every wave. He holds your cat
 Select **TV / Fullscreen** for the big-screen layout. Connect a standard-mapped controller and press A to register it with the browser, then press A to start. Left stick or D-pad aims; A or RT fires once per press; Menu pauses; A resumes or advances. Disconnecting a controller pauses an active game.
 
 Open the play link in Microsoft Edge on a supported Xbox. Enable game controls if the browser offers that option. Smart TV browsers vary: arrow keys and Enter/OK can work when the canvas has focus, or use a supported mouse. A computer connected to the TV by HDMI is another option. Physical Xbox and smart TV compatibility must be checked on the actual device; this project is a browser game, not a native console app.
+
+### Phone play
+
+Both editions fill the available phone viewport with a responsive playfield. Menu holds sound, installation help, and controller sensitivity. Rotate for a wider field. On iPhone, use Safari → Share → Add to Home Screen and enable Open as Web App if shown; launch that icon to remove browser chrome. Browser tabs retain their own address bar.
