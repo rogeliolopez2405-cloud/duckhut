@@ -9,18 +9,20 @@
 </head>
 <body>
   <main>
-    <header><a class="brand" href="./" aria-label="Duckhut home"><span class="brand-mark">DH</span> DUCKHUT<span class="edition">ARCADE / 01</span></a><button id="sound" aria-pressed="false">Sound off</button></header>
+    <header><a class="brand" href="./" aria-label="Duckhut home"><span class="brand-mark">DH</span> DUCKHUT<span class="edition">ARCADE / 01</span></a><div class="header-actions"><button id="tv" aria-pressed="false">TV / Fullscreen</button><button id="sound" aria-pressed="false">Sound off</button></div></header>
     <div class="game-heading"><div><span class="eyebrow">THE MARSH IS CALLING</span><h1>Just one more round.</h1></div><span class="live-label">FREE TO PLAY · OPEN SOURCE</span></div>
     <section class="cabinet" aria-label="Duck shooting game">
       <div class="scoreboard"><div><span>SCORE</span><strong id="score">000000</strong></div><div><span>BEST <small>ON THIS DEVICE</small></span><strong id="best">000000</strong></div><div><span>ROUND</span><strong id="round">01</strong></div><button id="pause" disabled>Pause <kbd>P</kbd></button></div>
       <div id="field" class="field">
         <canvas id="game" width="960" height="540" tabindex="0" aria-label="Game field. Click or tap flying ducks to shoot. Keyboard: move the crosshair with arrow keys and press Space to fire. Press P to pause."></canvas>
-        <div id="overlay" class="overlay"><div class="start-card"><span class="eyebrow">A LITTLE ARCADE NOSTALGIA</span><h2 id="overlay-title">DUCK<span>HUT</span></h2><p id="overlay-copy">Two ducks. Three shots.<br>Make them count.</p><button id="start" class="primary">LET’S PLAY <span>↗</span></button><p class="small" id="overlay-hint">Mouse, touch, or keyboard. No download.</p></div></div>
+        <div id="overlay" class="overlay"><div class="start-card"><span class="eyebrow">A LITTLE ARCADE NOSTALGIA</span><h2 id="overlay-title">DUCK<span>HUT</span></h2><p id="overlay-copy">Two ducks. Three shots.<br>Make them count.</p><button id="start" class="primary">LET’S PLAY <span>↗</span></button><p class="small" id="overlay-hint">Mouse, touch, keyboard, or controller.</p></div></div>
         <div id="toast" class="toast" role="status" aria-live="polite"></div>
       </div>
       <div class="roundbar"><div class="ammo"><span>SHOTS</span><strong id="ammo">● ● ●</strong></div><div class="hits"><span>THIS ROUND <b id="hit-count">0 / 10</b></span><div id="hit-markers" aria-label="No ducks hit"></div></div><div class="target">TO ADVANCE <strong>6 / 10</strong></div></div>
     </section>
     <div class="below"><p><span class="key">↖</span> Click or tap to shoot <span class="divider">/</span> <kbd>↑ ↓ ← →</kbd> Aim <kbd>Space</kbd> Shoot <span class="divider">/</span> <kbd>P</kbd> Pause</p><button id="restart">Restart game</button></div>
+    <p id="controller" class="controller-status" role="status">Controller: press A to connect</p>
+    <details class="tv-help"><summary>Playing on a TV or Xbox</summary><p>Open this game in your TV browser or Microsoft Edge on your Xbox. Choose TV / Fullscreen above. With a compatible controller: left stick or D-pad aims, A or right trigger shoots, and Menu pauses. Press A again to start or continue. If Xbox Edge offers game controls, enable them.</p><p>TV remotes: arrow keys aim and OK / Enter shoots when the game has focus. Browser and remote support varies; a USB mouse or a computer connected to your TV by HDMI is a fallback. This is a browser game, not an installed Xbox app.</p></details>
     <footer><p>Built for the joy of playing again.<span>An independent tribute with original pixel artwork and sounds.</span></p><a id="ideas" href="CONTRIBUTING.md">Have an idea? Make it part of the game ↗</a></footer>
   </main>
 </body>

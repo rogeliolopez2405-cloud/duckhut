@@ -41,3 +41,11 @@ No build step or package installation is required. Google Fonts is optional; sys
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## The dog and TV controls
+
+An original animated marsh retriever pops up after every wave. He holds your catches, wags his tail, and chuckles when both ducks escape. Reduced-motion preferences disable his bouncing and shot flashes.
+
+Select **TV / Fullscreen** for the big-screen layout. Connect a standard-mapped controller and press A to register it with the browser, then press A to start. Left stick or D-pad aims; A or RT fires once per press; Menu pauses; A resumes or advances. Disconnecting a controller pauses an active game.
+
+Open the play link in Microsoft Edge on a supported Xbox. Enable game controls if the browser offers that option. Smart TV browsers vary: arrow keys and Enter/OK can work when the canvas has focus, or use a supported mouse. A computer connected to the TV by HDMI is another option. Physical Xbox and smart TV compatibility must be checked on the actual device; this project is a browser game, not a native console app.

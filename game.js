@@ -3,7 +3,8 @@
   const $ = id => document.getElementById(id), canvas = $('game'), ctx = canvas.getContext('2d');
   const W=960,H=540,keys=new Set();
   let state='title',previousState='playing',round=1,score=0,best=0,shots=3,wave=0,results=[],ducks=[],particles=[],timer=0,nextWave=0,last=0,elapsed=0,flash=0,toastTime=0,sound=false,audio;
-  let aim={x:W/2,y:H/2,visible:false},seed=0;
+  let aim={x:W/2,y:H/2,visible:false},dogTime=0,dogHits=0,lastLaugh=0,padIndex=null,padButtons=[],padActive=false;
+  const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false;
   try { best=Number(localStorage.getItem('duckhut-best'))||0; } catch {}
   $('best').textContent=String(best).padStart(6,'0');
   const palettes={duck:{g:'#215b47',G:'#39815b',w:'#f6eed2',b:'#382f39',o:'#eab650',d:'#213638',t:'#9e7352'},wing:{}};
@@ -31,26 +32,67 @@
   function toast(text){$('toast').textContent=text;toastTime=2}
   function hud(){ $('score').textContent=String(score).padStart(6,'0');$('round').textContent=String(round).padStart(2,'0');$('ammo').textContent=Array.from({length:3},(_,i)=>i<shots?'●':'○').join(' ');$('hit-count').textContent=`${results.filter(Boolean).length} / 10`;$('hit-markers').innerHTML=Array.from({length:10},(_,i)=>`<i class="${i<results.length?(results[i]?'hit':'miss'):''}"></i>`).join('');$('hit-markers').setAttribute('aria-label',`${results.filter(Boolean).length} hits, ${results.filter(x=>!x).length} misses`);}
   function saveBest(){if(score>best){best=score;$('best').textContent=String(best).padStart(6,'0');try{localStorage.setItem('duckhut-best',String(best))}catch{}}}
-  function spawn(){wave++;shots=3;timer=Math.max(4.3,8-round*.25);nextWave=0;ducks=[0,1].map((_,i)=>({x:180+Math.random()*570,y:310+i*25,vx:(Math.random()>.5?1:-1)*(85+round*13),vy:-55-round*4,phase:Math.random()*6,alive:true,hit:false,done:false,fall:0}));state='playing';hud();toast(`ROUND ${round} · WAVE ${wave} / 5`)}
+  function spawn(){dogTime=0;wave++;shots=3;timer=Math.max(4.3,8-round*.25);nextWave=0;ducks=[0,1].map((_,i)=>({x:180+Math.random()*570,y:310+i*25,vx:(Math.random()>.5?1:-1)*(85+round*13),vy:-55-round*4,phase:Math.random()*6,alive:true,hit:false,done:false,fall:0}));state='playing';hud();toast(`ROUND ${round} · WAVE ${wave} / 5`)}
   function start(){round=1;score=0;wave=0;results=[];particles=[];keys.clear();$('overlay').hidden=true;$('pause').disabled=false;$('pause').innerHTML='Pause <kbd>P</kbd>';$('toast').textContent='';spawn();canvas.focus();}
   function finishRound(){saveBest();const passed=results.filter(Boolean).length>=6;state=passed?'roundover':'gameover';$('overlay').hidden=false;$('overlay-title').textContent=passed?'NICE SHOT!':'FLY AGAIN?';$('overlay-title').style.fontSize='clamp(26px, 5vw, 48px)';$('overlay-copy').textContent=passed?`${results.filter(Boolean).length} of 10 ducks. Round ${round+1} gets faster.`:`${score.toLocaleString()} points. Get 6 of 10 ducks to advance.`;$('start').textContent=passed?'NEXT ROUND ↗':'PLAY AGAIN ↗';$('overlay-hint').textContent=passed?'Take a breath. The marsh can wait.':'Every great run starts with another try.';$('pause').disabled=true;chirp(passed?880:180,.25,'triangle');}
-  function settle(){if(ducks.every(d=>d.done)&&!nextWave){nextWave=1.2;state='between';saveBest()}}
+  function settle(){if(ducks.every(d=>d.done)&&!nextWave){nextWave=3.2;dogTime=3.2;dogHits=ducks.filter(d=>d.hit).length;lastLaugh=0;state='between';toast(dogHits===2?'GOOD DOG! TWO DUCKS!':dogHits===1?'FETCHED ONE!':'HEH HEH HEH!');saveBest()}}
   function miss(d){if(d.done)return;d.done=true;d.alive=false;results.push(false);hud()}
-  function shoot(){if(state!=='playing'||shots<=0)return;shots--;flash=.06;chirp(120,.09,'sawtooth',.045);const hit=ducks.filter(d=>d.alive&&!d.done).reverse().find(d=>Math.abs(aim.x-(d.x+32))<40&&Math.abs(aim.y-(d.y+20))<32);if(hit){hit.alive=false;hit.hit=true;hit.done=true;score+=100*round;results.push(true);particles.push({x:hit.x+30,y:hit.y,t:1,text:`+${100*round}`});chirp(900,.12,'triangle');}hud();if(shots===0||ducks.every(d=>d.done)){for(const d of ducks)if(!d.done){d.vy=-180;d.escaping=true;}if(ducks.every(d=>d.done))settle();}}
+  function shoot(){if(state!=='playing'||shots<=0)return;shots--;flash=reducedMotion?0:.06;chirp(120,.09,'sawtooth',.045);const hit=ducks.filter(d=>d.alive&&!d.done).reverse().find(d=>Math.abs(aim.x-(d.x+32))<40&&Math.abs(aim.y-(d.y+20))<32);if(hit){hit.alive=false;hit.hit=true;hit.done=true;score+=100*round;results.push(true);particles.push({x:hit.x+30,y:hit.y,t:1,text:`+${100*round}`});chirp(900,.12,'triangle');}hud();if(shots===0||ducks.every(d=>d.done)){for(const d of ducks)if(!d.done){d.vy=-180;d.escaping=true;}if(ducks.every(d=>d.done))settle();}}
   function pause(){if(state==='paused'){state=previousState;$('overlay').hidden=true;$('pause').innerHTML='Pause <kbd>P</kbd>';canvas.focus()}else if(state==='playing'||state==='between'){previousState=state;state='paused';keys.clear();$('overlay').hidden=false;$('overlay-title').textContent='ON A BREAK';$('overlay-title').style.fontSize='clamp(26px, 5vw, 44px)';$('overlay-copy').textContent='Your ducks will be right here.';$('start').textContent='RESUME ↗';$('overlay-hint').textContent='Press P or select Resume to return.';$('pause').innerHTML='Resume <kbd>P</kbd>';}}
-  function frame(t){const dt=Math.min((t-last)/1000||0,.04);last=t;if(state!=='paused'){elapsed+=dt;flash=Math.max(0,flash-dt);if(toastTime>0){toastTime-=dt;if(toastTime<=0)$('toast').textContent=''}if(state==='playing'||state==='between'){if(keys.has('ArrowLeft'))aim.x-=400*dt;if(keys.has('ArrowRight'))aim.x+=400*dt;if(keys.has('ArrowUp'))aim.y-=400*dt;if(keys.has('ArrowDown'))aim.y+=400*dt;aim.x=Math.max(0,Math.min(W,aim.x));aim.y=Math.max(0,Math.min(H,aim.y));for(const d of ducks){if(d.hit){d.fall+=450*dt;d.y+=d.fall*dt;continue}if(d.done)continue;d.x+=d.vx*dt;d.y+=(d.escaping?-230:d.vy+Math.sin(elapsed*3+d.phase)*65)*dt;if(d.x<10){d.x=10;d.vx=Math.abs(d.vx)}if(d.x>W-75){d.x=W-75;d.vx=-Math.abs(d.vx)}if(d.y<35&&!d.escaping){d.y=35;d.vy=45}if(d.y>330&&!d.escaping){d.y=330;d.vy=-65}if(d.escaping&&d.y<-65)miss(d)}if(state==='playing'){timer-=dt;if(timer<=0||shots===0){if(!ducks.some(d=>d.escaping)&&ducks.some(d=>!d.done))toast('FLY AWAY!');for(const d of ducks)if(!d.done)d.escaping=true;}settle()}else{nextWave-=dt;if(nextWave<=0){if(wave>=5)finishRound();else spawn()}}}particles=particles.filter(p=>(p.t-=dt)>0);}
+  function frame(t){const dt=Math.min((t-last)/1000||0,.04);last=t;pollController(dt);if(state!=='paused'){elapsed+=dt;if(dogTime>0){dogTime=Math.max(0,dogTime-dt);if(dogHits===0&&dogTime<2.8&&dogTime>1&&elapsed-lastLaugh>.26){lastLaugh=elapsed;chirp(Math.sin(elapsed*10)>0?340:260,.1,'triangle',.04)}}flash=Math.max(0,flash-dt);if(toastTime>0){toastTime-=dt;if(toastTime<=0)$('toast').textContent=''}if(state==='playing'||state==='between'){if(keys.has('ArrowLeft'))aim.x-=400*dt;if(keys.has('ArrowRight'))aim.x+=400*dt;if(keys.has('ArrowUp'))aim.y-=400*dt;if(keys.has('ArrowDown'))aim.y+=400*dt;aim.x=Math.max(0,Math.min(W,aim.x));aim.y=Math.max(0,Math.min(H,aim.y));for(const d of ducks){if(d.hit){d.fall+=450*dt;d.y+=d.fall*dt;continue}if(d.done)continue;d.x+=d.vx*dt;d.y+=(d.escaping?-230:d.vy+Math.sin(elapsed*3+d.phase)*65)*dt;if(d.x<10){d.x=10;d.vx=Math.abs(d.vx)}if(d.x>W-75){d.x=W-75;d.vx=-Math.abs(d.vx)}if(d.y<35&&!d.escaping){d.y=35;d.vy=45}if(d.y>330&&!d.escaping){d.y=330;d.vy=-65}if(d.escaping&&d.y<-65)miss(d)}if(state==='playing'){timer-=dt;if(timer<=0||shots===0){if(!ducks.some(d=>d.escaping)&&ducks.some(d=>!d.done))toast('FLY AWAY!');for(const d of ducks)if(!d.done)d.escaping=true;}settle()}else{nextWave-=dt;if(nextWave<=0){if(wave>=5)finishRound();else spawn()}}}particles=particles.filter(p=>(p.t-=dt)>0);}
     backdrop();
     for(const d of ducks){if(d.done&&!d.hit)continue;if(d.y>H)continue;sprite(bird,d.x,d.y,4,palettes.duck,d.vx<0);if(!d.hit&&Math.sin(elapsed*19+d.phase)>0)sprite(wingUp,d.x+16,d.y-17,4,palettes.duck,d.vx<0);}
+    drawDog();
     for(const p of particles){ctx.fillStyle='#fff4c9';ctx.strokeStyle='#234936';ctx.lineWidth=4;ctx.font='bold 22px monospace';ctx.strokeText(p.text,p.x,p.y-(1-p.t)*35);ctx.fillText(p.text,p.x,p.y-(1-p.t)*35)}
     if(aim.visible&&state==='playing'){ctx.strokeStyle='#fff9df';ctx.lineWidth=2;ctx.beginPath();ctx.arc(aim.x,aim.y,15,0,Math.PI*2);ctx.moveTo(aim.x-23,aim.y);ctx.lineTo(aim.x-8,aim.y);ctx.moveTo(aim.x+8,aim.y);ctx.lineTo(aim.x+23,aim.y);ctx.moveTo(aim.x,aim.y-23);ctx.lineTo(aim.x,aim.y-8);ctx.moveTo(aim.x,aim.y+8);ctx.lineTo(aim.x,aim.y+23);ctx.stroke()}
     if(flash>0)rect(0,0,W,H,'#ffffff33');requestAnimationFrame(frame);
   }
   function pointer(e){const r=canvas.getBoundingClientRect();aim={x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height,visible:true}}
   canvas.addEventListener('pointermove',pointer);canvas.addEventListener('pointerdown',e=>{e.preventDefault();pointer(e);canvas.focus();shoot()});canvas.addEventListener('contextmenu',e=>e.preventDefault());
-  document.addEventListener('keydown',e=>{if(e.target instanceof HTMLButtonElement||e.target instanceof HTMLAnchorElement)return;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code)){e.preventDefault();keys.add(e.code);aim.visible=true;if(e.code==='Space'&&!e.repeat)shoot()}if(e.code==='KeyP'&&!e.repeat)pause()});document.addEventListener('keyup',e=>keys.delete(e.code));
+  document.addEventListener('keydown',e=>{if(e.code==='KeyP'&&!e.repeat){e.preventDefault();pause();return}if(e.code==='KeyF'&&!e.repeat){e.preventDefault();toggleTV();return}if(e.target instanceof HTMLButtonElement||e.target instanceof HTMLAnchorElement)return;if(e.code==='Enter'&&!e.repeat){e.preventDefault();if(['title','paused','roundover','gameover'].includes(state))$('start').onclick();else shoot();return;}if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code)){e.preventDefault();keys.add(e.code);aim.visible=true;if(e.code==='Space'&&!e.repeat)shoot()}});document.addEventListener('keyup',e=>keys.delete(e.code));
   window.addEventListener('blur',()=>{keys.clear();if(state==='playing'||state==='between')pause()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&(state==='playing'||state==='between'))pause()});
   $('start').onclick=()=>{if(state==='paused')pause();else if(state==='roundover'){round++;wave=0;results=[];$('overlay').hidden=true;$('pause').disabled=false;spawn();canvas.focus()}else start()};$('pause').onclick=pause;$('restart').onclick=start;
   $('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'Sound on':'Sound off';$('sound').setAttribute('aria-pressed',String(sound));if(sound)chirp(660,.12,'triangle')};
+  // Original marsh retriever. Its expression and catch change after each wave.
+  function drawDog(){
+    const show=dogTime>0||state==='title';if(!show)return;
+    const idle=state==='title',laugh=!idle&&dogHits===0;
+    const rise=idle?1:Math.min(1,(3.2-dogTime)/.35,dogTime/.35);
+    const x=idle?230:438,y=424-100*Math.max(0,rise)+(reducedMotion?0:Math.sin(elapsed*(laugh?22:7))*(laugh?4:2));
+    const p={b:'#382f29',t:'#b98045',h:'#daaa64',c:'#fff0c7',n:'#182b29',r:'#cd745c'};
+    const head=['..bb......bb..','.bttbhhhhbt tb.'.replaceAll(' ',''),'btttthhhhttttb','bttthhhhhhtttb','bttthnhhnh ttb'.replaceAll(' ',''),'.bbhhhhhhhhbb.','...hcccc cch...'.replaceAll(' ',''),'...hccnncch...','....ccnncc....',laugh?'....cnnnnc....':'....ccrrcc....','.....cccc.....'];
+    ctx.save();ctx.beginPath();ctx.rect(0,0,W,426);ctx.clip();
+    sprite(head,x,y,6,p);rect(x+24,y+61,36,53,p.t);rect(x+30,y+63,24,40,p.c);
+    const wag=reducedMotion?0:Math.sin(elapsed*14)*9;rect(x+58,y+85+wag,23,8,p.t);rect(x+75,y+76+wag,8,12,p.h);
+    if(laugh){rect(x+15,y+55,16,16,p.t);rect(x+54,y+55,16,16,p.t);}
+    else if(!idle){rect(x-4,y+66,26,12,p.t);sprite(bird,x-40,y+65,3,palettes.duck,true);if(dogHits===2){rect(x+64,y+66,26,12,p.t);sprite(bird,x+77,y+65,3,palettes.duck);}}
+    ctx.restore();
+  }
+  function pollController(dt){
+    let pads=[];try{pads=Array.from(navigator.getGamepads?.()||[])}catch{}
+    const pad=pads.find(p=>p&&p.connected&&p.mapping==='standard');
+    if(!pad){if(padActive&&(state==='playing'||state==='between'))pause();padActive=false;padIndex=null;padButtons=[];$('controller').textContent=pads.some(Boolean)?'Controller layout unsupported · use keyboard or mouse':'Controller: press A to connect';return;}
+    if(pad.index!==padIndex){padIndex=pad.index;padButtons=pad.buttons.map(b=>b.pressed);padActive=true;$('controller').textContent='Controller connected · stick aim · A / RT shoot · Menu pause';return;}
+    const held=i=>!!pad.buttons[i]?.pressed,edge=i=>held(i)&&!padButtons[i];
+    if(document.hidden){padButtons=pad.buttons.map(b=>b.pressed);return;}
+    const axis=n=>Math.abs(n||0)<.18?0:Math.sign(n)*(Math.abs(n)-.18)/.82;
+    if(state==='playing'){
+      const dx=axis(pad.axes[0])+(held(15)?1:0)-(held(14)?1:0),dy=axis(pad.axes[1])+(held(13)?1:0)-(held(12)?1:0);
+      aim.x=Math.max(0,Math.min(W,aim.x+dx*420*dt));aim.y=Math.max(0,Math.min(H,aim.y+dy*420*dt));aim.visible=true;
+      if(edge(0)||edge(7))shoot();
+    }else if(edge(0)&&['title','paused','roundover','gameover'].includes(state))$('start').onclick();
+    if(edge(9))pause();
+    padButtons=pad.buttons.map(b=>b.pressed);
+  }
+  async function toggleTV(){
+    const main=document.querySelector('main');
+    if(document.body.classList.contains('tv-mode')){document.body.classList.remove('tv-mode');if(document.fullscreenElement)try{await document.exitFullscreen()}catch{};}
+    else{document.body.classList.add('tv-mode');try{await main.requestFullscreen?.()}catch{toast('TV layout ready · fullscreen unavailable in this browser')}}
+    $('tv').textContent=document.body.classList.contains('tv-mode')?'Exit TV mode':'TV / Fullscreen';
+    $('tv').setAttribute('aria-pressed',String(document.body.classList.contains('tv-mode')));
+  }
+  $('tv').onclick=toggleTV;
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement){document.body.classList.remove('tv-mode');$('tv').textContent='TV / Fullscreen';$('tv').setAttribute('aria-pressed','false')}});
   // Set the public repository once, for both contribution links and the README.
   fetch('repo.json').then(r=>r.ok?r.json():null).then(config=>{if(config&&/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/.test(config.url))$('ideas').href=config.url+'/issues/new/choose'}).catch(()=>{});
   hud();requestAnimationFrame(frame);
