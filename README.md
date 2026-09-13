@@ -2,6 +2,20 @@
 
 [Play Duckhut](https://rogeliolopez2405-cloud.github.io/duckhut/) · [Suggest an idea](https://github.com/rogeliolopez2405-cloud/duckhut/issues/new/choose)
 
+[Play V2: Afterglow](https://rogeliolopez2405-cloud.github.io/duckhut/?edition=modern) — smooth artwork, a dusk marsh, lighting, a new dog, and wave/time indicators. The classic edition remains available from the edition selector.
+
+## Slower controller aiming
+
+Default maximum stick speed is now 144 canvas pixels/second, down from 420. Gentle stick movements use a curved response for fine aiming. The 18% deadzone filters drift, and diagonal movement is normalized. Use the aim-speed slider or LB/RB to adjust between 20% and 100%; the setting saves on your device. Hold LT for 45% precision speed. These controls work in both editions.
+
+## App shortcut and offline play
+
+On Xbox, use Edge → Favorites → Add this page to favorites. This avoids typing the address each time; it still opens in Edge. Native Xbox app installation is not provided by this project.
+
+On a supported phone or desktop browser, use **Install / shortcut**. The Install button appears when the browser offers installation. Safari users can use Share → Add to Home Screen. Each edition has a web app manifest with its own start URL. After the initial online load and service-worker installation, the game files are available offline. External fonts may fall back to system fonts. Updates wait for existing game windows to close and use the network when available.
+
+Controller logic is tested using simulated gamepads. Browser rendering is checked separately; confirm the sensitivity on your physical controller.
+
 A little arcade nostalgia, playable in a browser. An independent Duck Hunt-inspired prototype with original pixel art and synthesized sounds. No Nintendo assets, music, or affiliation.
 
 ## Play locally
