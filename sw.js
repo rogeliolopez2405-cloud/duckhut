@@ -1,6 +1,6 @@
 'use strict';
-const CACHE='duckhut-v2-5';
-const FILES=['./','index.html','style.css?v=phone4','game.js?v=phone4','modern.js','install.js','mobile.js?v=phone4','repo.json','manifest.webmanifest','modern.webmanifest','icon-192.png','icon-512.png'];
+const CACHE='duckhut-v2-6';
+const FILES=['./','index.html','style.css?v=flocks1','game.js?v=flocks1','modern.js?v=flocks1','install.js','mobile.js?v=flocks1','repo.json','manifest.webmanifest','modern.webmanifest','icon-192.png','icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES))));
 // New versions wait for open games to close, so an update cannot interrupt play.
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('duckhut-')&&key!==CACHE).map(key=>caches.delete(key))))));

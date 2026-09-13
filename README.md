@@ -27,8 +27,8 @@ Open `index.html` in your browser. For a local web server, run `python -m http.s
 ## How to play
 
 - Click or tap a flying duck. Keyboard players can aim with arrow keys and shoot with Space.
-- Two ducks appear in each wave. You have three shots per wave.
-- Five waves make a round. Hit at least six of ten ducks to advance.
+- Rounds 1–2: two ducks and three shots per wave. Rounds 3–5: three ducks and four shots. Round 6 onward: four ducks and five shots.
+- Five waves make a round. Hit 60% to advance: 6/10, 9/15, or 12/20. Flight speed gradually rises to a cap; larger flocks get extra time and always one spare shot.
 - Each hit earns 100 × the current round. Ducks get faster as you advance.
 - Press P to pause. The game also pauses when you leave the tab.
 - Sound is optional. Your best score stays on your device if browser storage is available.

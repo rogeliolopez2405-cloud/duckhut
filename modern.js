@@ -32,7 +32,7 @@ window.DuckhutModern=(()=>{
     ellipse(c,x,y+56,24,35,'#ba906e');ellipse(c,x,y+53,14,28,'#f0d8b3');ellipse(c,x,y+3,31,28,'#cfa67e');ellipse(c,x-29,y+3,12,24,'#815e4f');ellipse(c,x+29,y+3,12,24,'#815e4f');ellipse(c,x-9,y-3,3,4,'#182b3b');ellipse(c,x+9,y-3,3,4,'#182b3b');ellipse(c,x,y+13,18,13,'#f2dabc');ellipse(c,x,y+8,7,5,'#233444');
     ellipse(c,x,y+20,8,laugh?8:5,'#4b3540');if(!laugh)ellipse(c,x+2,y+24,4,5,'#e6a098');
     c.strokeStyle='#60dccc';c.lineWidth=5;c.beginPath();c.moveTo(x-17,y+30);c.lineTo(x+17,y+30);c.stroke();ellipse(c,x,y+35,4,5,'#f7dca0');
-    if(!idle&&hits>0){duck(c,{x:x-98,y:y+22,vx:-1,hit:true,phase:0},time,true);if(hits===2)duck(c,{x:x+36,y:y+22,vx:1,hit:true,phase:0},time,true);ellipse(c,x-26,y+42,10,9,'#cfa67e');ellipse(c,x+26,y+42,10,9,'#cfa67e')}
+    if(!idle&&hits>0){duck(c,{x:x-98,y:y+22,vx:-1,hit:true,phase:0},time,true);if(hits>=2)duck(c,{x:x+36,y:y+22,vx:1,hit:true,phase:0},time,true);ellipse(c,x-26,y+42,10,9,'#cfa67e');ellipse(c,x+26,y+42,10,9,'#cfa67e')}
     if(laugh){ellipse(c,x-19,y+21,9,8,'#cfa67e');ellipse(c,x+19,y+21,9,8,'#cfa67e')}c.restore();
   }
   return{background,duck,dog};
