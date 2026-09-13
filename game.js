@@ -52,9 +52,11 @@
     const bounds=canvas.getBoundingClientRect();
     const height=bounds.width>0?Math.max(1,Math.round(W*bounds.height/bounds.width)):H;
     if(height!==H){const ratio=height/H;for(const d of ducks)d.y*=ratio;for(const p of particles)p.y*=ratio;aim.y*=ratio;H=height;canvas.height=H;}
-    ctx.save();ctx.scale(1,H/540);backdrop();ctx.restore();
+    ctx.save();
+    if(H>540){rect(0,0,W,H,modern?'#142a53':'#8dc9c1');ctx.translate(0,H-540);}else ctx.scale(1,H/540);
+    backdrop();ctx.restore();
     for(const d of ducks){if(d.done&&!d.hit)continue;if(d.y>H)continue;if(modern&&window.DuckhutModern){window.DuckhutModern.duck(ctx,d,elapsed,reducedMotion);continue;}sprite(bird,d.x,d.y,4,palettes.duck,d.vx<0);if(!d.hit&&Math.sin(elapsed*19+d.phase)>0)sprite(wingUp,d.x+16,d.y-17,4,palettes.duck,d.vx<0);}
-    ctx.save();ctx.translate(0,(H-540)*(modern?489:426)/540);drawDog();ctx.restore();
+    ctx.save();ctx.translate(0,H>540?H-540:(H-540)*(modern?489:426)/540);drawDog();ctx.restore();
     for(const p of particles){ctx.fillStyle='#fff4c9';ctx.strokeStyle='#234936';ctx.lineWidth=4;ctx.font='bold 22px monospace';ctx.strokeText(p.text,p.x,p.y-(1-p.t)*35);ctx.fillText(p.text,p.x,p.y-(1-p.t)*35)}
     if(aim.visible&&state==='playing'){ctx.strokeStyle='#fff9df';ctx.lineWidth=2;ctx.beginPath();ctx.arc(aim.x,aim.y,15,0,Math.PI*2);ctx.moveTo(aim.x-23,aim.y);ctx.lineTo(aim.x-8,aim.y);ctx.moveTo(aim.x+8,aim.y);ctx.lineTo(aim.x+23,aim.y);ctx.moveTo(aim.x,aim.y-23);ctx.lineTo(aim.x,aim.y-8);ctx.moveTo(aim.x,aim.y+8);ctx.lineTo(aim.x,aim.y+23);ctx.stroke()}
     if(flash>0)rect(0,0,W,H,'#ffffff33');requestAnimationFrame(frame);
