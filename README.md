@@ -69,3 +69,18 @@ Open the play link in Microsoft Edge on a supported Xbox. Enable game controls i
 ### Phone play
 
 Both editions fill the available phone viewport with a responsive playfield. Menu holds sound, installation help, and controller sensitivity. Rotate for a wider field. On iPhone, use Safari → Share → Add to Home Screen and enable Open as Web App if shown; launch that icon to remove browser chrome. Browser tabs retain their own address bar.
+
+
+Phone and touch targets now scale with the visible field: a 390px-wide phone shows Classic ducks at about 70 × 48 CSS pixels (previously 25 × 17) and Afterglow ducks at about 89 × 44 (previously 31 × 16, excluding animated wings). Tap areas scale with the artwork and cover the wings. Desktop artwork, round rules, ammo, scoring and controller sensitivity stay the same.
+
+### Local regression checks
+
+No dependencies or build step are required. With Node installed, run:
+
+```sh
+node tests/game.cjs
+node tests/game.cjs --modern
+node tests/offline.cjs
+```
+
+These exercise gameplay, simulated controllers, portrait/landscape touch mapping, enlarged target edges and offline cache handling. Actual iPhone Safari and physical controller checks remain separate device tests.
