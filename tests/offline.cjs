@@ -12,4 +12,3 @@ online=true;handlers.fetch({request:{url:'https://example.com/duckhut/game.js',m
 online=false;handlers.fetch({request:{url:'https://example.com/duckhut/game.js',method:'GET'},respondWith:p=>response=p,waitUntil:p=>pending.push(p)});assert.equal(await(await response).text(),'fresh network');
 console.log('PASS: all offline shell assets exist; cache cleanup scoped to Duckhut; V2 navigation fallback; fresh network and cached asset fallback.');
 })().catch(e=>{console.error(e);process.exit(1)});
-
