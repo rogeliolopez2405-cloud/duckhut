@@ -60,7 +60,7 @@ MIT. See [LICENSE](LICENSE).
 
 ## The dog and TV controls
 
-An original animated marsh retriever pops up after every wave. He holds your catches, wags his tail, and chuckles when both ducks escape. Reduced-motion preferences disable his bouncing and shot flashes.
+A custom cream-colored, shaggy companion inspired by the owner's dog pops up after every wave, wearing his blue-gray folded paper sailor hat. Classic uses pixel art and Afterglow uses smooth canvas artwork. He holds your catches, wags his tail, and chuckles when both ducks escape. Reduced-motion preferences disable his bouncing and shot flashes.
 
 Select **TV / Fullscreen** for the big-screen layout. Connect a standard-mapped controller and press A to register it with the browser, then press A to start. Left stick or D-pad aims; A or RT fires once per press; Menu pauses; A resumes or advances. Disconnecting a controller pauses an active game.
 
@@ -81,6 +81,9 @@ No dependencies or build step are required. With Node installed, run:
 node tests/game.cjs
 node tests/game.cjs --modern
 node tests/offline.cjs
+node tests/companion.cjs
 ```
 
 These exercise gameplay, simulated controllers, portrait/landscape touch mapping, enlarged target edges and offline cache handling. Actual iPhone Safari and physical controller checks remain separate device tests.
+
+The companion blinks, wags, fetches and chuckles, with motion disabled when reduced motion is requested. Phone layouts enlarge him for visibility. Only original canvas artwork ships with the game; the private reference photograph is not included.
