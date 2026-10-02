@@ -26,14 +26,49 @@ window.DuckhutModern=(()=>{
   }
   function dog(c,{time,remaining,hits,idle,reducedMotion}){
     const rise=idle?1:Math.min(1,(3.2-remaining)/.35,remaining/.35),laugh=!idle&&hits===0;
-    const x=idle?244:480,y=479-Math.max(0,rise)*77+(reducedMotion?0:Math.sin(time*(laugh?20:5))*2);
-    c.save();c.beginPath();c.rect(0,0,960,489);c.clip();
-    c.strokeStyle='#b88b67';c.lineWidth=10;c.lineCap='round';c.beginPath();c.moveTo(x+22,y+65);c.quadraticCurveTo(x+51,y+59,x+47,y+43+(reducedMotion?0:Math.sin(time*12)*7));c.stroke();
-    ellipse(c,x,y+56,24,35,'#ba906e');ellipse(c,x,y+53,14,28,'#f0d8b3');ellipse(c,x,y+3,31,28,'#cfa67e');ellipse(c,x-29,y+3,12,24,'#815e4f');ellipse(c,x+29,y+3,12,24,'#815e4f');ellipse(c,x-9,y-3,3,4,'#182b3b');ellipse(c,x+9,y-3,3,4,'#182b3b');ellipse(c,x,y+13,18,13,'#f2dabc');ellipse(c,x,y+8,7,5,'#233444');
-    ellipse(c,x,y+20,8,laugh?8:5,'#4b3540');if(!laugh)ellipse(c,x+2,y+24,4,5,'#e6a098');
-    c.strokeStyle='#60dccc';c.lineWidth=5;c.beginPath();c.moveTo(x-17,y+30);c.lineTo(x+17,y+30);c.stroke();ellipse(c,x,y+35,4,5,'#f7dca0');
-    if(!idle&&hits>0){duck(c,{x:x-98,y:y+22,vx:-1,hit:true,phase:0},time,true);if(hits>=2)duck(c,{x:x+36,y:y+22,vx:1,hit:true,phase:0},time,true);ellipse(c,x-26,y+42,10,9,'#cfa67e');ellipse(c,x+26,y+42,10,9,'#cfa67e')}
-    if(laugh){ellipse(c,x-19,y+21,9,8,'#cfa67e');ellipse(c,x+19,y+21,9,8,'#cfa67e')}c.restore();
+    const x=idle?244:480,y=479-Math.max(0,rise)*90+(reducedMotion?0:Math.sin(time*(laugh?18:5))*(laugh?3:1.5));
+    const cream='#dfcfad',light='#f3e7ca',tan='#c4aa84',shadow='#9c8063',ink='#282729';
+    c.save();c.beginPath();c.rect(0,0,960,489);c.clip();c.translate(x,y);
+    // Tapered, irregular locks follow the real coat's direction instead of smooth bands.
+    function lock(px,py,length,lean,width,color){c.fillStyle=color;c.beginPath();c.moveTo(px-width,py);c.bezierCurveTo(px-width-lean*.2,py+length*.45,px+lean-width,py+length*.9,px+lean,py+length);c.bezierCurveTo(px+lean+width*.25,py+length*.55,px+width,py+length*.2,px+width,py);c.fill();}
+    function strand(px,py,length,lean,color){c.strokeStyle=color;c.lineWidth=.8;c.beginPath();c.moveTo(px,py);c.bezierCurveTo(px-3,py+length*.3,px+lean+3,py+length*.7,px+lean,py+length);c.stroke();}
+    const wag=reducedMotion?0:Math.sin(time*10)*4;
+    // Seated pear-shaped torso and a low feathered tail, like the photograph.
+    ellipse(c,-15,65,39,33,tan);ellipse(c,-5,49,29,40,cream);
+    c.strokeStyle=tan;c.lineWidth=16;c.lineCap='round';c.beginPath();c.moveTo(-31,77);c.quadraticCurveTo(-67,80,-62,57+wag);c.stroke();
+    for(let i=0;i<8;i++)lock(-63+i*3,55+wag+(i%3)*4,21+(i%3)*4,-11+i,2, i%2?cream:light);
+    for(let i=0;i<48;i++){const px=-39+(i*17)%66,py=25+(i*13)%57;lock(px,py,11+(i%5)*3,Math.sin(i*2)*8,3.4,i%4===0?tan:i%3===0?light:cream);}
+    ellipse(c,-16,85,14,12,cream);ellipse(c,14,84,13,13,cream);
+    for(let i=0;i<11;i++)lock(-29+i*4.5,70+(i%3)*4,20+(i%2)*5,Math.sin(i)*3,3, i%2?light:cream);
+    c.save();c.rotate(reducedMotion?-.04:-.04+Math.sin(time*2)*.012);
+    // A broader head, uneven hanging ears and a three-quarter muzzle pointing right.
+    ellipse(c,-27,6,15,36,tan);ellipse(c,30,5,12,32,tan);
+    for(let i=0;i<12;i++){const side=i<7?-1:1,px=side*(24+(i%7)*2.3);lock(px,-12+(i%3)*4,44+(i%4)*5,side*(3+(i%3)),3,i%3?cream:tan);strand(px,-6,43,side*5,light);}
+    ellipse(c,0,-5,32,29,cream);ellipse(c,8,14,31,24,cream);
+    // Small dark eyes sit under the fringe; the nearer eye is a little larger.
+    const blink=!reducedMotion&&time%5>4.8;
+    if(blink||laugh){c.strokeStyle=ink;c.lineWidth=2.4;for(const [ex,ey] of [[-12,-1],[16,-5]]){c.beginPath();c.moveTo(ex-4,ey);c.quadraticCurveTo(ex,ey-3,ex+4,ey);c.stroke();}}
+    else{ellipse(c,-12,-1,5,4.4,ink);ellipse(c,16,-5,3.8,3.5,ink);ellipse(c,-13,-2,1,1,light);ellipse(c,15,-6,.8,.8,light);}
+    for(let i=0;i<15;i++){const px=-29+i*4.1;lock(px,-28+(i%3)*2,15+(i%4)*5,Math.sin(i*1.8)*6,3,i%3?cream:light);strand(px,-25,17+(i%3)*4,Math.sin(i)*5,light);}
+    // Full moustache and beard; nose offset right rather than centered on a toy face.
+    ellipse(c,7,22,27,20,tan);ellipse(c,-2,16,22,15,cream);ellipse(c,24,15,16,14,cream);
+    for(let i=0;i<19;i++){const px=-19+i*3.1;lock(px,10+(i%4)*3,24+(i%5)*2,(px-10)*.28,3,i%4===0?tan:i%3===0?light:cream);}
+    c.strokeStyle=shadow;c.lineWidth=1.5;c.beginPath();c.moveTo(3,30);c.quadraticCurveTo(18,35,29,27);c.stroke();
+    if(laugh){ellipse(c,15,30,9,6,ink);ellipse(c,17,34,5,4,'#c58e84');}
+    else if(!idle){ellipse(c,16,32,5,3,'#bb817a');}
+    c.save();c.translate(17,13);c.rotate(-.15);c.fillStyle=ink;c.beginPath();c.moveTo(-9,-4);c.quadraticCurveTo(0,-10,9,-4);c.quadraticCurveTo(9,3,1,8);c.quadraticCurveTo(-6,7,-9,-4);c.fill();ellipse(c,-2,-3,3,1,'#66615a');c.restore();
+    for(let i=0;i<14;i++){const px=-25+i*4.7;strand(px,13+(i%4)*2,19+(i%5)*2,(px-12)*.3,i%3?light:tan);}
+    // Soft, slightly askew folded paper with the broad brim and central crease in the photo.
+    c.fillStyle='#8293a7';c.beginPath();c.moveTo(-37,-26);c.lineTo(-3,-64);c.lineTo(35,-29);c.closePath();c.fill();
+    c.fillStyle='#667a93';c.beginPath();c.moveTo(-3,-64);c.lineTo(35,-29);c.lineTo(0,-22);c.closePath();c.fill();
+    c.strokeStyle='#c0cbd3';c.lineWidth=1;c.beginPath();c.moveTo(-37,-26);c.lineTo(-3,-64);c.lineTo(0,-22);c.stroke();
+    c.fillStyle='#8e9eb0';c.beginPath();c.moveTo(-43,-26);c.lineTo(-35,-35);c.lineTo(34,-32);c.lineTo(43,-22);c.lineTo(34,-13);c.lineTo(-40,-11);c.closePath();c.fill();
+    c.fillStyle='#768aa2';c.beginPath();c.moveTo(-43,-26);c.lineTo(0,-29);c.lineTo(34,-13);c.lineTo(-40,-11);c.closePath();c.fill();
+    c.strokeStyle='#b4c1ce';c.lineWidth=1.3;c.beginPath();c.moveTo(-40,-11);c.lineTo(34,-13);c.moveTo(-35,-35);c.lineTo(-43,-26);c.stroke();c.restore();
+    if(!idle&&hits>0){duck(c,{x:-98,y:40,vx:-1,hit:true,phase:0},time,true);if(hits>=2)duck(c,{x:36,y:40,vx:1,hit:true,phase:0},time,true);}
+    if(!idle){for(const side of [-1,1]){const px=side*(laugh?22:30),py=laugh?40:62;ellipse(c,px,py,10,9,cream);for(let i=0;i<4;i++)lock(px-7+i*4,py-3,13+(i%2)*3,side*2,2.5,i%2?light:cream);}}
+
+    c.restore();
   }
   return{background,duck,dog};
 })();
