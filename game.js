@@ -94,25 +94,27 @@
     const x=idle?200:430,y=424-112*Math.max(0,rise)+(reducedMotion?0:Math.sin(elapsed*(laugh?18:5))*(laugh?3:1.5));
     const blink=!reducedMotion&&elapsed%5>4.8;
     // Cream fringe, floppy tan ears, shaggy muzzle and the reference's folded paper hat.
-    const p={t:'#c3a57d',h:'#e6d0aa',c:'#fff0d3',f:'#f5e4c3',n:'#302d30',r:'#d48c88',s:'#657c94',b:'#8da1b6',l:'#b6c6d3'};
+    const p={t:'#b59a75',h:'#d7c29e',c:'#f3e8cb',f:'#e7d8b7',n:'#302d30',r:'#d48c88',s:'#657c94',b:'#8da1b6',l:'#b6c6d3'};
     const head=[
-      '......hffffffh......','....hhffcfffcfhh....','...thfcfcfffcfcht...',
-      '..tthfcfcfcfcfchtt..','..thhffcfccfcffhht..','.tthhffccffccffhhtt.',
-      '.thhhfffcffcffhhhht.','.thhhfnnffffnnfhhht.',
-      '.thhhfnnffffnnfhhht.','.thhffcfcfffcfcfhht.','..hhffccfnnfccffhh..',
-      '..hffccfnnnnfccffh..','...ffccffffffccff...',laugh?'...ffccfnnnnfccff...':'...ffccffnnffccff...',
-      laugh?'....ffccnrrnccff....':idle?'....ffccffffccff....':'....ffccfrrfccff....','.....ffccccccff.....','......ffcfcfff......','.......ffcff........'
+      '......hhffffhh......','....hhffcfffcfhh....','...thfcfcfffcfcht...',
+      '..tthfcfcfcfcfchtt..','..thhffcfccfcffhht..','.tthhfcffcfcffhhtt..',
+      '.thhhfffcffcffhhht..','.thhhfnnfcfcnnfhhht.',
+      '.thhhfnnfcfcffhfhht.','.thhffcfccfffcfcfhht','..hhffcfcffccnnnffh.',
+      '..hffcfcfffcnnnnffh.','..hhffcfcffccnnfffh.','...hffcfcfffcfcffh..',
+      laugh?'...hffcfcffnnnffh...':'...hffcfcfffnnffh...',laugh?'....hffcfcfrrcffh...':'....hffcfcffcfcfh...',
+      '.....hffcfcffcch....','......hffcfcfhh.....','.......hfcfhh.......'
     ];
-    const hat=['.........l..........','........lbl.........','.......lbbsl........','......lbbbssl.......','.....lbbbbsssl......','....lbbbbbssssl.....','...lbbbbbbsssssl....','..lbbbbbbbssssssl...','.bbbbbbbbbbbbbbbbbb.','..lssssssssssssssl..','...llllllllllllll...'];
+    const hat=['........l...........','.......lbl..........','......lbbsl.........','.....lbbbssl........','....lbbbbsssl.......','...lbbbbbssssl......','..lbbbbbbssssssl....','.bbbbbbbbbbbbbbbbbb.','..lssssssssssssssl..','...llllllllllllll...'];
     ctx.save();ctx.beginPath();ctx.rect(0,0,W,426);ctx.clip();
     const wag=reducedMotion?0:Math.sin(elapsed*12)*7;
-    rect(x+83,y+88+wag,25,10,p.h);rect(x+101,y+78+wag,10,15,p.c);rect(x+107,y+73+wag,5,10,p.f);
-    rect(x+25,y+64,50,64,p.h);rect(x+30,y+69,40,55,p.f);
-    for(let i=0;i<6;i++){rect(x+25+i*9,y+83+(i%2)*5,5,27,p.c);}
+    rect(x-8,y+103+wag,39,12,p.h);rect(x-15,y+95+wag,12,17,p.f);
+    for(let i=0;i<7;i++)rect(x-16+i*6,y+94+wag+(i%3)*4,4,15,p.c);
+    rect(x+15,y+77,63,49,p.h);rect(x+23,y+67,48,60,p.f);
+    for(let i=0;i<29;i++){const px=x+14+(i*13)%64,py=y+75+(i*11)%43;rect(px,py,5,8+(i%4)*3,i%3?p.f:p.c);rect(px+3,py+7,3,6,p.h);}
     sprite(head,x,y,5,p);
-    if(blink||laugh){rect(x+30,y+35,10,10,p.f);rect(x+60,y+35,10,10,p.f);rect(x+30,y+39,10,3,p.n);rect(x+60,y+39,10,3,p.n);}
-    else{rect(x+31,y+35,3,3,p.c);rect(x+61,y+35,3,3,p.c);}
-    sprite(hat,x,y-44,5,p);
+    if(blink||laugh){rect(x+30,y+35,10,10,p.f);rect(x+60,y+35,10,10,p.f);rect(x+30,y+39,10,3,p.n);rect(x+60,y+36,10,3,p.n);}
+    else{rect(x+31,y+35,3,3,p.c);rect(x+61,y+35,2,2,p.c);}
+    sprite(hat,x,y-38,5,p);
     if(laugh){rect(x+12,y+73,19,16,p.c);rect(x+69,y+73,19,16,p.c);}
     else if(!idle){sprite(bird,x-39,y+79,3,palettes.duck,true);if(dogHits>=2)sprite(bird,x+89,y+79,3,palettes.duck);rect(x+8,y+80,22,15,p.f);rect(x+70,y+80,22,15,p.f);}
     else{rect(x+19,y+101,24,17,p.c);rect(x+57,y+101,24,17,p.c);}

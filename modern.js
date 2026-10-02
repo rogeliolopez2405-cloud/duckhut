@@ -27,40 +27,47 @@ window.DuckhutModern=(()=>{
   function dog(c,{time,remaining,hits,idle,reducedMotion}){
     const rise=idle?1:Math.min(1,(3.2-remaining)/.35,remaining/.35),laugh=!idle&&hits===0;
     const x=idle?244:480,y=479-Math.max(0,rise)*90+(reducedMotion?0:Math.sin(time*(laugh?18:5))*(laugh?3:1.5));
-    const cream='#f7e7c9',light='#fff2d8',tan='#cfb28c',shadow='#b49573',ink='#302d32';
+    const cream='#dfcfad',light='#f3e7ca',tan='#c4aa84',shadow='#9c8063',ink='#282729';
     c.save();c.beginPath();c.rect(0,0,960,489);c.clip();c.translate(x,y);
-    // Soft shaggy tail and chest; all movement honors reduced-motion preferences.
-    const wag=reducedMotion?0:Math.sin(time*12)*8;
-    c.strokeStyle=tan;c.lineWidth=13;c.lineCap='round';c.beginPath();c.moveTo(24,66);c.quadraticCurveTo(64,70,51,37+wag);c.stroke();
-    ellipse(c,51,37+wag,9,13,cream);ellipse(c,55,31+wag,5,8,light);
-    ellipse(c,0,59,30,40,tan);ellipse(c,0,57,25,35,cream);
-    for(let i=0;i<7;i++)ellipse(c,-23+i*7,69+(i%2)*7,6,17,i%2?light:cream);
-    c.save();c.rotate(reducedMotion?0:Math.sin(time*2)*(idle?.025:.015));
-    // Long floppy ears and layered fringe, matching the pet rather than a retriever.
-    ellipse(c,-32,9,15,32,tan);ellipse(c,32,9,15,32,tan);
-    for(const side of [-1,1])for(let i=0;i<4;i++)ellipse(c,side*(26+i*5),17+i*4,4,21,i%2?cream:tan);
-    ellipse(c,0,-2,35,32,cream);
-    for(let i=0;i<9;i++){const xx=-30+i*7.5;ellipse(c,xx,-15+Math.abs(xx)*.12,6,18,i%3?cream:light);}
+    // Tapered, irregular locks follow the real coat's direction instead of smooth bands.
+    function lock(px,py,length,lean,width,color){c.fillStyle=color;c.beginPath();c.moveTo(px-width,py);c.bezierCurveTo(px-width-lean*.2,py+length*.45,px+lean-width,py+length*.9,px+lean,py+length);c.bezierCurveTo(px+lean+width*.25,py+length*.55,px+width,py+length*.2,px+width,py);c.fill();}
+    function strand(px,py,length,lean,color){c.strokeStyle=color;c.lineWidth=.8;c.beginPath();c.moveTo(px,py);c.bezierCurveTo(px-3,py+length*.3,px+lean+3,py+length*.7,px+lean,py+length);c.stroke();}
+    const wag=reducedMotion?0:Math.sin(time*10)*4;
+    // Seated pear-shaped torso and a low feathered tail, like the photograph.
+    ellipse(c,-15,65,39,33,tan);ellipse(c,-5,49,29,40,cream);
+    c.strokeStyle=tan;c.lineWidth=16;c.lineCap='round';c.beginPath();c.moveTo(-31,77);c.quadraticCurveTo(-67,80,-62,57+wag);c.stroke();
+    for(let i=0;i<8;i++)lock(-63+i*3,55+wag+(i%3)*4,21+(i%3)*4,-11+i,2, i%2?cream:light);
+    for(let i=0;i<48;i++){const px=-39+(i*17)%66,py=25+(i*13)%57;lock(px,py,11+(i%5)*3,Math.sin(i*2)*8,3.4,i%4===0?tan:i%3===0?light:cream);}
+    ellipse(c,-16,85,14,12,cream);ellipse(c,14,84,13,13,cream);
+    for(let i=0;i<11;i++)lock(-29+i*4.5,70+(i%3)*4,20+(i%2)*5,Math.sin(i)*3,3, i%2?light:cream);
+    c.save();c.rotate(reducedMotion?-.04:-.04+Math.sin(time*2)*.012);
+    // A broader head, uneven hanging ears and a three-quarter muzzle pointing right.
+    ellipse(c,-27,6,15,36,tan);ellipse(c,30,5,12,32,tan);
+    for(let i=0;i<12;i++){const side=i<7?-1:1,px=side*(24+(i%7)*2.3);lock(px,-12+(i%3)*4,44+(i%4)*5,side*(3+(i%3)),3,i%3?cream:tan);strand(px,-6,43,side*5,light);}
+    ellipse(c,0,-5,32,29,cream);ellipse(c,8,14,31,24,cream);
+    // Small dark eyes sit under the fringe; the nearer eye is a little larger.
     const blink=!reducedMotion&&time%5>4.8;
-    if(blink||laugh){c.strokeStyle=ink;c.lineWidth=3;for(const xx of [-13,13]){c.beginPath();c.moveTo(xx-4,0);c.quadraticCurveTo(xx,-4,xx+4,0);c.stroke();}}
-    else{ellipse(c,-13,-1,4.5,5,ink);ellipse(c,13,-1,4.5,5,ink);ellipse(c,-14,-2,1.4,1.4,light);ellipse(c,12,-2,1.4,1.4,light);}
-    // Rounded, furry beard and muzzle with a dark nose emerging from the fringe.
-    ellipse(c,0,22,25,24,tan);
-    for(let i=0;i<7;i++)ellipse(c,-21+i*7,27+(i%2)*3,6,19,i%2?cream:light);
-    ellipse(c,-11,14,15,12,cream);ellipse(c,11,14,15,12,cream);
-    ellipse(c,0,11,9,7,ink);ellipse(c,-2,9,3,1.5,'#656064');
-    ellipse(c,0,27,9,laugh?9:4,ink);if(laugh||!idle)ellipse(c,0,32,5,5,'#d48c88');
-    c.strokeStyle=light;c.lineWidth=2;
-    for(const side of [-1,1])for(let i=0;i<3;i++){c.beginPath();c.moveTo(side*(8+i*5),12);c.quadraticCurveTo(side*(22+i*3),18,side*(18+i*5),31+i*3);c.stroke();}
-    // Folded blue-gray paper sailor hat: triangular crown, center seam and turned brim.
-    c.fillStyle='#8198b0';c.beginPath();c.moveTo(-37,-27);c.lineTo(0,-72);c.lineTo(37,-27);c.closePath();c.fill();
-    c.fillStyle='#617b97';c.beginPath();c.moveTo(0,-72);c.lineTo(37,-27);c.lineTo(3,-26);c.closePath();c.fill();
-    c.strokeStyle='#c7d4de';c.lineWidth=1.5;c.beginPath();c.moveTo(-37,-27);c.lineTo(0,-72);c.lineTo(3,-26);c.stroke();
-    c.fillStyle='#9cafc1';c.beginPath();c.moveTo(-43,-29);c.lineTo(40,-31);c.lineTo(34,-12);c.lineTo(-35,-10);c.closePath();c.fill();
-    c.fillStyle='#748ca4';c.beginPath();c.moveTo(-35,-10);c.lineTo(-43,-29);c.lineTo(-28,-21);c.lineTo(34,-12);c.closePath();c.fill();
-    c.strokeStyle='#c1d0dd';c.lineWidth=2;c.beginPath();c.moveTo(-35,-10);c.lineTo(34,-12);c.stroke();c.restore();
-    if(!idle&&hits>0){duck(c,{x:-98,y:35,vx:-1,hit:true,phase:0},time,true);if(hits>=2)duck(c,{x:36,y:35,vx:1,hit:true,phase:0},time,true);}
-    ellipse(c,laugh?-22:-29,laugh?39:57,11,10,light);ellipse(c,laugh?22:29,laugh?39:57,11,10,light);
+    if(blink||laugh){c.strokeStyle=ink;c.lineWidth=2.4;for(const [ex,ey] of [[-12,-1],[16,-5]]){c.beginPath();c.moveTo(ex-4,ey);c.quadraticCurveTo(ex,ey-3,ex+4,ey);c.stroke();}}
+    else{ellipse(c,-12,-1,5,4.4,ink);ellipse(c,16,-5,3.8,3.5,ink);ellipse(c,-13,-2,1,1,light);ellipse(c,15,-6,.8,.8,light);}
+    for(let i=0;i<15;i++){const px=-29+i*4.1;lock(px,-28+(i%3)*2,15+(i%4)*5,Math.sin(i*1.8)*6,3,i%3?cream:light);strand(px,-25,17+(i%3)*4,Math.sin(i)*5,light);}
+    // Full moustache and beard; nose offset right rather than centered on a toy face.
+    ellipse(c,7,22,27,20,tan);ellipse(c,-2,16,22,15,cream);ellipse(c,24,15,16,14,cream);
+    for(let i=0;i<19;i++){const px=-19+i*3.1;lock(px,10+(i%4)*3,24+(i%5)*2,(px-10)*.28,3,i%4===0?tan:i%3===0?light:cream);}
+    c.strokeStyle=shadow;c.lineWidth=1.5;c.beginPath();c.moveTo(3,30);c.quadraticCurveTo(18,35,29,27);c.stroke();
+    if(laugh){ellipse(c,15,30,9,6,ink);ellipse(c,17,34,5,4,'#c58e84');}
+    else if(!idle){ellipse(c,16,32,5,3,'#bb817a');}
+    c.save();c.translate(17,13);c.rotate(-.15);c.fillStyle=ink;c.beginPath();c.moveTo(-9,-4);c.quadraticCurveTo(0,-10,9,-4);c.quadraticCurveTo(9,3,1,8);c.quadraticCurveTo(-6,7,-9,-4);c.fill();ellipse(c,-2,-3,3,1,'#66615a');c.restore();
+    for(let i=0;i<14;i++){const px=-25+i*4.7;strand(px,13+(i%4)*2,19+(i%5)*2,(px-12)*.3,i%3?light:tan);}
+    // Soft, slightly askew folded paper with the broad brim and central crease in the photo.
+    c.fillStyle='#8293a7';c.beginPath();c.moveTo(-37,-26);c.lineTo(-3,-64);c.lineTo(35,-29);c.closePath();c.fill();
+    c.fillStyle='#667a93';c.beginPath();c.moveTo(-3,-64);c.lineTo(35,-29);c.lineTo(0,-22);c.closePath();c.fill();
+    c.strokeStyle='#c0cbd3';c.lineWidth=1;c.beginPath();c.moveTo(-37,-26);c.lineTo(-3,-64);c.lineTo(0,-22);c.stroke();
+    c.fillStyle='#8e9eb0';c.beginPath();c.moveTo(-43,-26);c.lineTo(-35,-35);c.lineTo(34,-32);c.lineTo(43,-22);c.lineTo(34,-13);c.lineTo(-40,-11);c.closePath();c.fill();
+    c.fillStyle='#768aa2';c.beginPath();c.moveTo(-43,-26);c.lineTo(0,-29);c.lineTo(34,-13);c.lineTo(-40,-11);c.closePath();c.fill();
+    c.strokeStyle='#b4c1ce';c.lineWidth=1.3;c.beginPath();c.moveTo(-40,-11);c.lineTo(34,-13);c.moveTo(-35,-35);c.lineTo(-43,-26);c.stroke();c.restore();
+    if(!idle&&hits>0){duck(c,{x:-98,y:40,vx:-1,hit:true,phase:0},time,true);if(hits>=2)duck(c,{x:36,y:40,vx:1,hit:true,phase:0},time,true);}
+    if(!idle){for(const side of [-1,1]){const px=side*(laugh?22:30),py=laugh?40:62;ellipse(c,px,py,10,9,cream);for(let i=0;i<4;i++)lock(px-7+i*4,py-3,13+(i%2)*3,side*2,2.5,i%2?light:cream);}}
+
     c.restore();
   }
   return{background,duck,dog};
